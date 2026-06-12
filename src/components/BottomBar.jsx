@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
+import Ionicons from '@react-native-vector-icons/ionicons';
+
 function BottomBar() {
   const navigation = useNavigation();
   const route = useRoute(); //route.name -> name of current screen
@@ -21,7 +23,7 @@ function BottomBar() {
             navigation.navigate('LandingScreen');
           }}
         >
-          <Text style={{ fontSize: 24 }}>🏠</Text>
+          <Ionicons name="home-outline" size={24} color="#fff" />
           {route.name === 'LandingScreen' ? (
             <Text style={styles.activeText}>Home</Text>
           ) : null}
@@ -37,14 +39,14 @@ function BottomBar() {
             navigation.navigate('ProfileScreen');
           }}
         >
-          <Text style={{ fontSize: 28 }}>👤</Text>
+          <Ionicons name="person-outline" size={24} color="#fff" />
           {route.name === 'ProfileScreen' ? (
             <Text style={styles.activeText}>Profile</Text>
           ) : null}
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.iconButton}>
-          <Text style={{ fontSize: 28 }}>✉️</Text>
+          <Ionicons name="mail-outline" size={24} color="#fff" />
           {/* {route.name === 'LandingScreen' ? (
             <Text style={styles.activeText}>Mail</Text>
           ) : (
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
     height: 56,
 
     borderRadius: 28,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#ffffffff',
 
     minWidth: 140,
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'AbhayaLibre-ExtraBold',
     fontSize: 20,
-    textAlign:'center',
+    textAlign: 'center',
     marginLeft: 10,
   },
 
