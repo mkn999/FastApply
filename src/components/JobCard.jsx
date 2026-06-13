@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { View, Text, StyleSheet } from 'react-native';
 export default function JobCard({
@@ -10,9 +10,7 @@ export default function JobCard({
   isOdd,
 }) {
   return (
-
     <View style={[styles.jobCard, isOdd ? styles.oddCard : styles.evenCard]}>
-        
       <View style={styles.jobCardContainer}>
         <Text style={[styles.jobTitle, !isOdd && styles.darkText]}>
           {title}
@@ -29,7 +27,9 @@ export default function JobCard({
 
       <View style={styles.jobCardContainer}>
         <Text style={[styles.jobBtm, !isOdd && styles.darkText]}>
-          {`${postedDays} days ago`}
+          {/* {`${postedDays} days ago`} */}
+                    {`by ${postedDays}`}
+
         </Text>
 
         <Text style={[styles.jobBtm, !isOdd && styles.darkText]}>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontFamily: 'AbhayaLibre-Medium',
     fontSize: 25,
   },
-    jobTi: {
+  jobTi: {
     color: '#ffffff',
     fontFamily: 'AbhayaLibre-Medium',
     fontSize: 15,

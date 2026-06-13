@@ -4,60 +4,47 @@ import BottomBar from '../components/BottomBar';
 import JobCard from '../components/JobCard';
 import { FlatList } from 'react-native';
 import { Dimensions } from 'react-native';
+import Test from '../components/test';
+import { useEffect, useState } from 'react';
+import Loading from '../components/Loader';
 
 const screenHeight = Dimensions.get('window').height;
 
 export default function LandingScreen() {
-  const jobs = [
-    {
-      id: '1',
-      title: 'Python Developer',
-      timeLeft: '29 Days',
-      jobDescription: 'This is the job description of the application',
-      postedDays: '1 day',
-      jobLocation: 'Tokyo, Japan',
-    },
-    {
-      id: '2',
-      title: 'AI/ML Trainer',
-      timeLeft: '15 Days',
-      jobDescription: 'React Native Developer',
-      postedDays: '2 days',
-      jobLocation: 'Bangalore, India',
-    },
-    {
-      id: '3',
-      title: 'Python Developer',
-      timeLeft: '29 Days',
-      jobDescription: 'This is the job description of the application',
-      postedDays: '1 day',
-      jobLocation: 'Tokyo, Japan',
-    },
-    {
-      id: '4',
-      title: 'React Developer',
-      timeLeft: '15 Days',
-      jobDescription: 'React Native Developer',
-      postedDays: '2 days',
-      jobLocation: 'Bangalore, India',
-    },
-    {
-      id: '5',
-      title: 'Python Developer',
-      timeLeft: '29 Days',
-      jobDescription: 'This is the job description of the application',
-      postedDays: '1 day',
-      jobLocation: 'Tokyo, Japan',
-    },
-    {
-      id: '6',
-      title: 'React Developer',
-      timeLeft: '15 Days',
-      jobDescription: 'React Native Developer',
-      postedDays: '2 days',
-      jobLocation: 'Bangalore, India',
-    },
-  ];
+  const [job, setJob] = useState([]);
+  const [loading, setLoading] = useState(true); //for loading
+  const [error, setError] = useState(''); //if server is off / not working
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    loadJobs();
+  }, []);
+
+  const loadJobs = async (isRefresh = false) => {
+    try {
+      if (isRefresh) {
+        setRefreshing(true);
+      }
+      const response = await fetch('http://10.48.46.124:5000/jobs');
+
+      const data = await response.json();
+      setJob(data);
+      setLoading(false);
+      console.log(data);
+    } catch (error) {
+      setError('Uh oh! Server not responding...');
+      console.log('Fetch Error', error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+      setError()
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <View
       style={{
@@ -74,21 +61,25 @@ export default function LandingScreen() {
         }}
       >
         <FlatList
-          data={jobs}
-          keyExtractor={item => item.id} //for every item give item.id
+          data={job}
+          keyExtractor={item => item.id.toString()} //for every item give item.id
           showsVerticalScrollIndicator={false} //disable white scroll
+          refreshing={refreshing}
+          onRefresh={() => loadJobs(true)} //makes the isRefresh true
           renderItem={({ item, index }) => (
             <JobCard
               title={item.title}
               timeLeft={item.timeLeft}
               jobDescription={item.jobDescription}
-              postedDays={item.postedDays}
+              postedDays={item.company}
               jobLocation={item.jobLocation}
               isOdd={(index + 1) % 2 !== 0}
             />
           )}
         />
       </View>
+      <Test />
+
       <BottomBar />
     </View>
   );
@@ -99,6 +90,6 @@ const styles = StyleSheet.create({
     fontFamily: 'AbhayaLibre-ExtraBold',
     fontSize: 40,
     marginLeft: 40,
-    marginVertical:30,
+    marginVertical: 30,
   },
 });
